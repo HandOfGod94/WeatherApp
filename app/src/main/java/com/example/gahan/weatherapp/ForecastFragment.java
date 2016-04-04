@@ -34,12 +34,12 @@ import java.util.List;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MainActivityFragment extends Fragment
+public class ForecastFragment extends Fragment
 {
 
     ArrayAdapter<String> mForecastAdapter;
 
-    public MainActivityFragment()
+    public ForecastFragment()
     {
     }
 
@@ -74,7 +74,7 @@ public class MainActivityFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_forecast, container, false);
 
         String[] forecastArray = {
                 "Today - Sunny - 88/63",
