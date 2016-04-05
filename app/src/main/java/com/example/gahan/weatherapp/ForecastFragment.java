@@ -1,8 +1,11 @@
 package com.example.gahan.weatherapp;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.preference.Preference;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.text.format.Time;
@@ -45,11 +48,28 @@ public class ForecastFragment extends Fragment
     {
     }
 
+    public void updateWeather()
+    {
+        FetchWeatherTask fetchWeatherTask = new FetchWeatherTask();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String location =
+                prefs.getString(getString(R.string.pref_location_key),
+                        getString(R.string.pref_location_defaultValue));
+        fetchWeatherTask.execute(location);
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onStart()
+    {
+        super.onStart();
+        updateWeather();
     }
 
     @Override
@@ -64,11 +84,7 @@ public class ForecastFragment extends Fragment
     {
         int id = item.getItemId();
         if (id == R.id.action_refresh)
-        {
-            FetchWeatherTask fetchWeatherTask = new FetchWeatherTask();
-            fetchWeatherTask.execute("Chennai,in");
-            Toast.makeText(getActivity(), "Refreshing", Toast.LENGTH_SHORT).show();
-        }
+            updateWeather();
         return super.onOptionsItemSelected(item);
     }
 
@@ -78,13 +94,7 @@ public class ForecastFragment extends Fragment
     {
         View rootView = inflater.inflate(R.layout.fragment_forecast, container, false);
 
-        String[] forecastArray = {
-                "Today - Sunny - 88/63",
-                "Tomorrow - Foggy - 70/40",
-                "Weds - Cloudy - 72/63"
-        };
-
-        List<String> weekForecast = new ArrayList<>(Arrays.asList(forecastArray));
+        List<String> weekForecast = new ArrayList<>();
 
         mForecastAdapter = new ArrayAdapter<String>(
                 getActivity(),
