@@ -132,10 +132,22 @@ public class ForecastFragment extends Fragment
 
         private String formatHighLows(double high, double low)
         {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            String unitType = prefs.getString(
+                    getString(R.string.pref_units_key),
+                    getString(R.string.pref_units_values_metric));
+
+            if (unitType.equals(getString(R.string.pref_units_values_imperial)))
+            {
+                high = (high*1.8)+32;
+                low= (low*1.8)+32;
+            }
+
             long roundedHigh = Math.round(high);
             long roundedLow = Math.round(low);
 
             String highLowStr = roundedHigh + "/" + roundedLow;
+
             return highLowStr;
         }
 
